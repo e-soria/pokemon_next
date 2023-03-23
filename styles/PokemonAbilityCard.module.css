@@ -1,0 +1,48 @@
+.ability_card {
+    position: relative;
+}
+
+@media (max-width: 640px) {
+    .ability_card {
+        min-width: 100%;
+    }
+}
+
+.ability_card .card_header {
+    justify-content: center;
+}
+
+.ability_card .card_header p {
+    position: absolute;
+    font-size: 20px;
+    right: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    font-size: 18px;
+    font-family: var(--primary-font);
+    text-align: center;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    background: #dad4d4;
+    color: var(--black-color);
+    align-items: center;
+    justify-content: center;
+    font-weight: 400;
+}
+
+.ability_card .card_header h3 {
+    font-weight: 300;
+    text-transform: capitalize;
+}
+
+.ability_card .card_body {
+    text-align: center;
+    padding-top: 0px;
+}
+
+.ability_card .card_body p {
+    max-width: 460px;
+    margin: 0 auto;
+}

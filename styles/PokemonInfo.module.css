@@ -1,0 +1,32 @@
+.pokemon_info {
+    margin: 0px;
+    padding: 0px;
+    min-width: 100%;
+    max-width: 100%;
+}
+
+.pokemon_info .favorites_cta button {
+    margin: 0 auto;
+}
+
+.pokemon_info .section_title {
+    text-align: center;
+    justify-content: center;
+    margin: 48px 0px;
+}
+
+.pokemon_info .section_title h2 {
+    margin: 0px;
+    font-size: 32px;
+    font-family: var(--primary-font);
+}
+
+.pokemon_info .pokemon_sprites {
+    margin-top: 40px;
+}
+
+/*--------- ABILITIES ----------*/
+
+.pokemon_info .ability_cards_container {
+    justify-content: center;
+}
