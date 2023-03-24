@@ -143,15 +143,19 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
     const { name } = params as { name: string};
     const { data } = await pokeApi.get<Pokemon>(`/pokemon/${name}`);
 
+    // RESOLVE ALL POKEMON ABILITY PROMISES
+
     const abilitiesPromises = await Promise.all( data.abilities.map(ability => {
         return pokeApi.get<Pokemon>(`/ability/${ability.ability.name}`).then(results => {
             return results.data;
         })
     }))
 
+    // GET POKEMON ABILITIES INFO
+
     const abilities = abilitiesPromises.map(ability => {
 
-        const abilityDescription = ability.effect_entries[1].effect;
+        const abilityDescription = ability.effect_entries[1]?.effect || ability.flavor_text_entries[7].flavor_text;
 
         return {
             name: ability.name,
@@ -159,6 +163,8 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
 
         }
     })
+
+    // BUILD THE POKEMON OBJECT WITH THE INFO WE'LL USE
 
     const pokemon = {
         id: data.id,
