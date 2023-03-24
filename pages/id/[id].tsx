@@ -102,7 +102,7 @@ const PokemonByNamePage: NextPage<Props> = ({pokemon}) => {
                         <Text h2 transform="capitalize">Abilities</Text>
                     </div>
 
-                    <Grid.Container gap={2}>
+                    <Grid.Container gap={2} justify='center'>
                         {
                             pokemon.abilities.map((ability, index) => {
                                 return <PokemonAbilityCard 

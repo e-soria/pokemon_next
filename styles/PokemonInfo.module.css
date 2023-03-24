@@ -24,9 +24,3 @@
 .pokemon_info .pokemon_sprites {
     margin-top: 40px;
 }
-
-/*--------- ABILITIES ----------*/
-
-.pokemon_info .ability_cards_container {
-    justify-content: center;
-}
