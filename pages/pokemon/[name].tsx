@@ -12,14 +12,13 @@ import { Pokemon, PokemonListResponse } from "@/interfaces";
 import { localFavorites } from "@/utils";
 
 import styles from '../../styles/PokemonInfo.module.css';
+import getPokemonInfo from "@/api/getPokemonInfo";
 
 interface Props {
   pokemon: Pokemon;
 }
 
 const PokemonByNamePage: NextPage<Props> = ({pokemon}) => {
-
-
 
     const [isInFavorites, setIsInFavorites] = useState(false);
 
@@ -134,50 +133,30 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
         paths: pokemonNames.map( name => ({
             params: { name }
         })),
-        fallback: false
+        fallback: 'blocking'
     }
 }
 
 export const getStaticProps: GetStaticProps = async ({params}) => {
     
     const { name } = params as { name: string};
-    const { data } = await pokeApi.get<Pokemon>(`/pokemon/${name}`);
 
-    // RESOLVE ALL POKEMON ABILITY PROMISES
+    const pokemon = await getPokemonInfo( name );
 
-    const abilitiesPromises = await Promise.all( data.abilities.map(ability => {
-        return pokeApi.get<Pokemon>(`/ability/${ability.ability.name}`).then(results => {
-            return results.data;
-        })
-    }))
-
-    // GET POKEMON ABILITIES INFO
-
-    const abilities = abilitiesPromises.map(ability => {
-
-        const abilityDescription = ability.effect_entries[1]?.effect || ability.flavor_text_entries[7].flavor_text;
-
+    if (!pokemon) {
         return {
-            name: ability.name,
-            description: abilityDescription
-
+            redirect: {
+                destination: '/',
+                permanent: false
+            }
         }
-    })
-
-    // BUILD THE POKEMON OBJECT WITH THE INFO WE'LL USE
-
-    const pokemon = {
-        id: data.id,
-        name: data.name,
-        sprites: data.sprites,
-        stats: data.stats,
-        abilities
-    }
+    }    
 
     return {
         props: {
            pokemon: pokemon
-        }
+        },
+        revalidate: 86400 // 60 * 60 *24
     }
 }
 

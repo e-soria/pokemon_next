@@ -7,19 +7,17 @@ import confetti from 'canvas-confetti';
 import { Layout } from "@/components/layouts";
 import { PokemonAbilityCard, PokemonHero, PokemonSpritesCard, PokemonStatCard } from "@/components/pokemon";
 
-import { pokeApi } from "@/api";
 import { Pokemon } from "@/interfaces";
 import { localFavorites } from "@/utils";
 
 import styles from '../../styles/PokemonInfo.module.css';
+import getPokemonInfo from "@/api/getPokemonInfo";
 
 interface Props {
   pokemon: Pokemon;
 }
 
 const PokemonByNamePage: NextPage<Props> = ({pokemon}) => {
-
-
 
     const [isInFavorites, setIsInFavorites] = useState(false);
 
@@ -133,44 +131,30 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
         paths: pokemons151.map( id => ({
             params: { id }
         })),
-        fallback: false
+        fallback: 'blocking'
     }
 }
 
 export const getStaticProps: GetStaticProps = async ({params}) => {
     
     const { id } = params as { id: string};
-    const { data } = await pokeApi.get<Pokemon>(`/pokemon/${id}`);
+    
+    const pokemon = await getPokemonInfo( id );
 
-    const abilitiesPromises = await Promise.all( data.abilities.map(ability => {
-        return pokeApi.get<Pokemon>(`/ability/${ability.ability.name}`).then(results => {
-            return results.data;
-        })
-    }))
-
-    const abilities = abilitiesPromises.map(ability => {
-
-        const abilityDescription = ability.effect_entries[1].effect;
-
+    if (!pokemon) {
         return {
-            name: ability.name,
-            description: abilityDescription
-
+            redirect: {
+                destination: '/',
+                permanent: false
+            }
         }
-    })
-
-    const pokemon = {
-        id: data.id,
-        name: data.name,
-        sprites: data.sprites,
-        stats: data.stats,
-        abilities
-    }
+    }    
 
     return {
         props: {
            pokemon: pokemon
-        }
+        },
+        revalidate: 86400 // 60 * 60 *24
     }
 }
 

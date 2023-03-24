@@ -14,7 +14,7 @@ const PokemonHero: FC<Props> = ({pokemon}) => {
         <Grid className={styles.pokemon_hero} xs={12}>
             <Card.Image 
                 className={styles.pokemon_image}
-                src={pokemon.sprites.other?.dream_world.front_default || '/no-image.png'}
+                src={pokemon.sprites.pokemon_image || '/img/no-image.jpg'}
                 alt={`image of ${pokemon.name}`}
                 width={350}
                 height={350}
